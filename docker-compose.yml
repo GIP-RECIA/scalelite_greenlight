@@ -8,21 +8,13 @@ services:
   greenlight:
     entrypoint: [bin/start]
     image: bigbluebutton/greenlight:v2
+    container_name: greenlight-v2
+    env_file: greenlight
     restart: unless-stopped
     volumes:
       - ./log/greenlight:/usr/src/app/log
     depends_on:
       - db
-    env_file: .greenlight_env
-    environment:
-      DB_ADAPTER: postgresql
-      DB_HOST: postgres
-      DB_NAME: greenlight
-      DB_USERNAME: ${POSTGRES_USER:-postgres}
-      DB_PASSWORD: ${POSTGRES_PASSWORD:-password}
-      BIGBLUEBUTTON_ENDPOINT: https://${URL_HOST}/bigbluebutton/api/
-      BIGBLUEBUTTON_SECRET: ${LOADBALANCER_SECRET}
-      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
     ports:
       - 127.0.0.1:5000:80
 
@@ -65,9 +57,11 @@ services:
       - "443:443"
     volumes:
       - ./log/nginx/:/var/log/nginx
+      - /etc/x509:/etc/nginx/ssl:ro
       - ./data/certbot/conf:/etc/nginx/ssl
       - ./data/certbot/www:/var/www/certbot
       - ./data/nginx/scalelite:/etc/nginx/conf.d/scalelite
+      - ./conf/nginx/greenlight.nginx:/etc/bigbluebutton/nginx/greenlight.nginx
       - ${SCALELITE_RECORDING_DIR-/mnt/scalelite-recordings/var/bigbluebutton}/published:/var/bigbluebutton/published
     environment:
       - NGINX_SSL=${NGINX_SSL-true}
