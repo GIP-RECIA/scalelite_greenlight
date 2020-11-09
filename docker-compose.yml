@@ -10,7 +10,7 @@ services:
     image: bigbluebutton/greenlight:v2
     restart: unless-stopped
     volumes:
-      - /var/log/greenlight:/usr/src/app/log
+      - ./log/greenlight:/usr/src/app/log
     depends_on:
       - db
     env_file: .greenlight_env
