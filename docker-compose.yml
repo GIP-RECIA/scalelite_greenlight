@@ -1,8 +1,8 @@
 version: '3'
 
-volumes:
-  postgres-data:
-  redis-data:
+# volumes:
+#   postgres-data:
+#   redis-data:
 
 services:
   greenlight:
@@ -13,40 +13,40 @@ services:
     restart: unless-stopped
     volumes:
       - ./log/greenlight:/usr/src/app/log
-    depends_on:
-      - db
+    # depends_on:
+    #   - db
     ports:
       - 127.0.0.1:5000:80
 
-  postgres:
-    image: postgres:11.5-alpine
-    container_name: postgres
-    restart: unless-stopped
-    ports:
-      - "127.0.0.1:5432:5432"
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_USER=${POSTGRES_USER:-postgres}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
+  # postgres:
+  #   image: postgres:11.5-alpine
+  #   container_name: postgres
+  #   restart: unless-stopped
+  #   ports:
+  #     - "127.0.0.1:5432:5432"
+  #   volumes:
+  #     - postgres-data:/var/lib/postgresql/data
+  #   environment:
+  #     - POSTGRES_USER=${POSTGRES_USER:-postgres}
+  #     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
 
-  redis:
-    image: redis:5.0-alpine
-    container_name: redis
-    restart: on-failure
-    ports:
-      - 127.0.0.1:6379:6379
-    volumes:
-      - redis-data:/data
+  # redis:
+  #   image: redis:5.0-alpine
+  #   container_name: redis
+  #   restart: on-failure
+  #   ports:
+  #     - 127.0.0.1:6379:6379
+  #   volumes:
+  #     - redis-data:/data
 
-  certbot:
-    image: certbot/certbot
-    container_name: certbot
-    volumes:
-      - ./log/certbot:/var/log/letsencrypt
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+  # certbot:
+  #   image: certbot/certbot
+  #   container_name: certbot
+  #   volumes:
+  #     - ./log/certbot:/var/log/letsencrypt
+  #     - ./data/certbot/conf:/etc/letsencrypt
+  #     - ./data/certbot/www:/var/www/certbot
+  #   entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
   scalelite-nginx:
     image: ${SCALELITE_REPO:-blindsidenetwks}/scalelite:${SCALELITE_TAG:-v1}-nginx
@@ -58,8 +58,8 @@ services:
     volumes:
       - ./log/nginx/:/var/log/nginx
       - /etc/x509:/etc/nginx/ssl:ro
-      - ./data/certbot/conf:/etc/nginx/ssl
-      - ./data/certbot/www:/var/www/certbot
+      # - ./data/certbot/conf:/etc/nginx/ssl
+      # - ./data/certbot/www:/var/www/certbot
       - ./data/nginx/scalelite:/etc/nginx/conf.d/scalelite
       - ./conf/nginx/greenlight.nginx:/etc/bigbluebutton/nginx/greenlight.nginx
       - ${SCALELITE_RECORDING_DIR-/mnt/scalelite-recordings/var/bigbluebutton}/published:/var/bigbluebutton/published
@@ -84,9 +84,9 @@ services:
       - REDIS_URL=${REDIS_URL:-redis://redis:6379}
       - DATABASE_URL=${DATABASE_URL:-postgres://postgres:password@postgres:5432/scalelite?pool=5}
       - URL_HOST=${URL_HOST}
-    depends_on:
-      - postgres
-      - redis
+    # depends_on:
+    #   - postgres
+    #   - redis
     logging:
       driver: journald
 
@@ -98,8 +98,8 @@ services:
       - REDIS_URL=${REDIS_URL:-redis://redis:6379}
       - DATABASE_URL=${DATABASE_URL:-postgres://postgres:password@postgres:5432/scalelite?pool=5}
     depends_on:
-      - postgres
-      - redis
+      # - postgres
+      # - redis
       - scalelite-api
     logging:
       driver: journald
@@ -115,8 +115,8 @@ services:
       - ${SCALELITE_RECORDING_DIR-/mnt/scalelite-recordings/var/bigbluebutton}:/var/bigbluebutton
       - ${SCALELITE_RECORDING_DIR-/mnt/scalelite-recordings/var/bigbluebutton}/spool:/var/bigbluebutton/spool
     depends_on:
-      - postgres
-      - redis
+      # - postgres
+      # - redis
       - scalelite-api
     logging:
       driver: journald
