@@ -13,6 +13,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./log/greenlight:/usr/src/app/log
+      - ./storage:/usr/src/app/storage
     # depends_on:
     #   - db
     ports:
@@ -60,7 +61,7 @@ services:
       - /etc/x509:/etc/nginx/ssl:ro
       # - ./data/certbot/conf:/etc/nginx/ssl
       # - ./data/certbot/www:/var/www/certbot
-      - ./data/nginx/scalelite:/etc/nginx/conf.d/scalelite
+      #- ./data/nginx/scalelite:/etc/nginx/conf.d/scalelite
       - ./conf/nginx/greenlight.nginx:/etc/bigbluebutton/nginx/greenlight.nginx
       - ${SCALELITE_RECORDING_DIR-/mnt/scalelite-recordings/var/bigbluebutton}/published:/var/bigbluebutton/published
     environment:
