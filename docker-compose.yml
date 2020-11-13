@@ -7,7 +7,7 @@ version: '3'
 services:
   greenlight:
     entrypoint: [bin/start]
-    image: bigbluebutton/greenlight:v2
+    image: giprecia/greenlight:release-v2-esco-0.0.8
     container_name: greenlight-v2
     env_file: greenlight
     restart: unless-stopped
