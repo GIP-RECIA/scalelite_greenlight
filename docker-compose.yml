@@ -52,7 +52,6 @@ services:
   scalelite-nginx:
     image: ${SCALELITE_REPO:-blindsidenetwks}/scalelite:${SCALELITE_TAG:-v1}-nginx
     container_name: scalelite-nginx
-    env_file: scalelite
     restart: unless-stopped
     ports:
       - "80:80"
@@ -74,7 +73,6 @@ services:
   scalelite-api:
     image: ${SCALELITE_REPO:-blindsidenetwks}/scalelite:${SCALELITE_TAG:-v1}-api
     container_name: scalelite-api
-    env_file: scalelite
     restart: unless-stopped
     ports:
       - "3000:3000"
@@ -96,7 +94,6 @@ services:
   scalelite-poller:
     image: ${SCALELITE_REPO:-blindsidenetwks}/scalelite:${SCALELITE_TAG:-v1}-poller
     container_name: scalelite-poller
-    env_file: scalelite
     restart: unless-stopped
     environment:
       - REDIS_URL=${REDIS_URL:-redis://redis:6379}
@@ -111,7 +108,6 @@ services:
   scalelite-recording-importer:
     image: ${SCALELITE_REPO:-blindsidenetwks}/scalelite:${SCALELITE_TAG:-v1}-recording-importer
     container_name: scalelite-recording-importer
-    env_file: scalelite
     restart: unless-stopped
     environment:
       - REDIS_URL=${REDIS_URL:-redis://redis:6379}
